@@ -7,6 +7,8 @@ import com.cholecystectomy.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -28,4 +30,9 @@ public class PatientService {
         patientToUpdate.setDoctor(doctor);
         repository.save(patientToUpdate);
     }
+
+    public List<Patient> getAllPatientsWithNoDoctor() {
+        return repository.findAllPatientsWithNoDoctor();
+    }
+
 }

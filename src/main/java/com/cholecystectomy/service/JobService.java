@@ -42,6 +42,9 @@ public class JobService {
     }
 
     public void delete(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Должность не найдена");
+        }
         repository.deleteById(id);
     }
 }
