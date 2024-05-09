@@ -2,7 +2,8 @@ package com.cholecystectomy.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,39 +11,36 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+@Data
 @Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
-public class User implements UserDetails {
+public abstract class User implements UserDetails {
     @Id
-    @Column(name = "id")
-    @Getter
-    @Setter
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
+    @NotNull
     private String email;
 
-    @Getter
-    @Setter
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
+    @NotNull
     private String name;
 
-    @Getter
-    @Setter
-    @Column(name = "password", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    @Column(nullable = false)
+    private Sex sex;
+
+    @Column(nullable = false)
     @JsonIgnore
+    @NotNull
     private String password;
 
-    @Getter
-    @Setter
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    @JsonIgnore
+    @Column(nullable = false)
+    @NotNull
     private Role role;
 
     @Override
@@ -75,12 +73,9 @@ public class User implements UserDetails {
         return true;
     }
 
+    @JsonIgnore
     public String getUsername() {
         return email;
-    }
-
-    public void setUsername(String email) {
-        this.email = email;
     }
 
 }

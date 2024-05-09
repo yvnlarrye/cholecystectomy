@@ -1,37 +1,31 @@
 package com.cholecystectomy.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+@Setter
+@Getter
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
-@NoArgsConstructor
 @Builder
 @AllArgsConstructor
 @Table(name = "patients")
-public class Patient {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("patient_id")
-    private Long id;
-
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    @JsonProperty("details")
-    private User userDetails;
-
-    @Enumerated(EnumType.STRING)
-    private Sex sex;
+@OnDelete(action = OnDeleteAction.CASCADE)
+public class Patient extends User {
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Doctor doctor;
 
+    public Patient() {
+        super.setRole(Role.ROLE_PATIENT);
+    }
 }
