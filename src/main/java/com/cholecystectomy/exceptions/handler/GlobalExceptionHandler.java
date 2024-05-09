@@ -2,7 +2,9 @@ package com.cholecystectomy.exceptions.handler;
 
 import com.cholecystectomy.exceptions.InvalidSignInDataException;
 import com.cholecystectomy.exceptions.ResourceNotFoundException;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.persistence.EntityExistsException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +22,17 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private Map<String, List<String>> getErrorsMap(List<String> errors) {
+        Map<String, List<String>> errorResponse = new HashMap<>();
+        errorResponse.put("errors", errors);
+        return errorResponse;
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, List<String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
         List<String> errors = ex.getBindingResult().getFieldErrors()
                 .stream().map(FieldError::getDefaultMessage).collect(Collectors.toList());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
-    }
-
-    private Map<String, List<String>> getErrorsMap(List<String> errors) {
-        Map<String, List<String>> errorResponse = new HashMap<>();
-        errorResponse.put("errors", errors);
-        return errorResponse;
     }
 
     @ExceptionHandler({EntityExistsException.class, UsernameNotFoundException.class, InvalidSignInDataException.class})
@@ -39,10 +41,37 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> handleUserNotFoundError(ResourceNotFoundException ex) {
+    public ResponseEntity<Map<String, String>> handleUserNotFoundError(Exception ex) {
         Map<String, String> response = new HashMap<>();
         response.put("error", ex.getMessage());
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, List<String>>> handleConstraintExceptions(
+            ConstraintViolationException e) {
+        List<String> errors = e.getConstraintViolations().stream().map(
+                constraintViolation -> "Поле " +
+                        constraintViolation.getPropertyPath() + " " +
+                        constraintViolation.getMessage()).toList();
+        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<Map<String, String>> handleExpiredJwtException(
+            ExpiredJwtException e) {
+
+        Map<String, String> response = new HashMap<>();
+        response.put("errors", "Срок действия сессии истёк");
+        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.UNAUTHORIZED);
+    }
+
+//    @ExceptionHandler(DataIntegrityViolationException.class)
+//    public ResponseEntity<Map<String, String>> handlePostgreSQLConstraintException(
+//            DataIntegrityViolationException e) {
+//        Map<String, String> response = new HashMap<>();
+//        response.put("errors", List.of(e.getMessage()).toString());
+//        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+//    }
 
 }
