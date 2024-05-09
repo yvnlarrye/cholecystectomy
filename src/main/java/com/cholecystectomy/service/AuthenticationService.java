@@ -4,8 +4,6 @@ import com.cholecystectomy.domain.dto.auth.JwtAuthenticationResponse;
 import com.cholecystectomy.domain.dto.auth.SignInRequest;
 import com.cholecystectomy.domain.dto.auth.SignUpRequest;
 import com.cholecystectomy.domain.model.Patient;
-import com.cholecystectomy.domain.model.Role;
-import com.cholecystectomy.domain.model.User;
 import com.cholecystectomy.exceptions.InvalidSignInDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,24 +27,18 @@ public class AuthenticationService {
      * @param request данные пользователя
      * @return токен
      */
+
+
     public JwtAuthenticationResponse signUp(SignUpRequest request) {
+        Patient patient = new Patient();
+        patient.setName(request.getName());
+        patient.setEmail(request.getEmail());
+        patient.setPassword(passwordEncoder.encode(request.getPassword()));
+        patient.setSex(request.getSex());
 
-        var user = User.builder()
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ROLE_PATIENT)
-                .build();
-
-        User savedUser = userService.create(user);
-        var patient = Patient.builder()
-                .userDetails(savedUser)
-                .sex(request.getSex())
-                .build();
         patientService.create(patient);
-
-        var jwt = jwtService.generateToken(user);
-        return new JwtAuthenticationResponse(jwt, user.getUsername(), user.getName());
+        var jwt = jwtService.generateToken(patient);
+        return new JwtAuthenticationResponse(jwt);
     }
 
     /**
@@ -61,12 +53,12 @@ public class AuthenticationService {
                     request.getEmail(),
                     request.getPassword()
             ));
-            var user = userService
+            var userDetails = userService
                     .userDetailsService()
                     .loadUserByUsername(request.getEmail());
 
-            var jwt = jwtService.generateToken(user);
-            return new JwtAuthenticationResponse(jwt, user.getUsername(), ((User) user).getName());
+            var jwt = jwtService.generateToken(userDetails);
+            return new JwtAuthenticationResponse(jwt);
         } catch (Exception e) {
             throw new InvalidSignInDataException("Неверное имя пользователя или пароль");
         }
