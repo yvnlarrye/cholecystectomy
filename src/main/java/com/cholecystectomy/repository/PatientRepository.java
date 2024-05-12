@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-    @Query("SELECT p FROM Patient p WHERE p.doctor_id = NULL")
-    List<Patient> findAllPatientsWithNoDoctor();
+//    @Query("SELECT p FROM Patient p WHERE p.doctor = null")
+    List<Patient> findAllByDoctorIsNull();
 }

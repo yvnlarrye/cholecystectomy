@@ -31,8 +31,14 @@ public class PatientService {
         repository.save(patientToUpdate);
     }
 
+    public void unassignDoctor(Long patientId) {
+        Patient patientToUpdate = getPatientById(patientId);
+        patientToUpdate.setDoctor(null);
+        repository.save(patientToUpdate);
+    }
+
     public List<Patient> getAllPatientsWithNoDoctor() {
-        return repository.findAllPatientsWithNoDoctor();
+        return repository.findAllByDoctorIsNull();
     }
 
 }

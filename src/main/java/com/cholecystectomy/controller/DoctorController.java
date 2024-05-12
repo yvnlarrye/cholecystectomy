@@ -1,9 +1,6 @@
 package com.cholecystectomy.controller;
 
-import com.cholecystectomy.domain.dto.doctor.AssignDoctorDto;
-import com.cholecystectomy.domain.dto.doctor.AssignDoctorResponse;
-import com.cholecystectomy.domain.dto.doctor.DoctorPatientsResponse;
-import com.cholecystectomy.domain.dto.doctor.DoctorProfileDto;
+import com.cholecystectomy.domain.dto.doctor.*;
 import com.cholecystectomy.domain.model.Doctor;
 import com.cholecystectomy.service.DoctorService;
 import com.cholecystectomy.service.PatientService;
@@ -26,9 +23,15 @@ public class DoctorController {
         return ResponseEntity.ok(new AssignDoctorResponse("Врач успешно прикреплен к пациенту"));
     }
 
+    @PutMapping("/unassign")
+    public ResponseEntity<AssignDoctorResponse> unassignDoctorToPatient(@RequestBody UnassignDoctorDto request) {
+        patientService.unassignDoctor(request.getPatientId());
+        return ResponseEntity.ok(new AssignDoctorResponse("Врач успешно откреплен от пациента"));
+    }
+
     @GetMapping("/{doctorId}/patients")
-    public ResponseEntity<DoctorPatientsResponse> getPatients(@PathVariable Long doctorId) {
-        return ResponseEntity.ok(new DoctorPatientsResponse(doctorService.getPatients(doctorId)));
+    public ResponseEntity<PatientsResponse> getPatients(@PathVariable Long doctorId) {
+        return ResponseEntity.ok(new PatientsResponse(doctorService.getPatients(doctorId)));
     }
 
     @GetMapping("/{id}")
