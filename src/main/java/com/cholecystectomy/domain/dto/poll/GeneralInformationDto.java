@@ -10,7 +10,6 @@ import java.util.Date;
 public class GeneralInformationDto {
     private Date birthDate;
     private int age;
-
     private int numberOfPregnancies;
     private int numberOfChildbirths;
     private String address;

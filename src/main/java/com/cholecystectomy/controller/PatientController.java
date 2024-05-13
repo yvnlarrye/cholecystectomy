@@ -3,6 +3,7 @@ package com.cholecystectomy.controller;
 import com.cholecystectomy.domain.dto.doctor.PatientsDoctorInfoDto;
 import com.cholecystectomy.domain.dto.doctor.PatientsResponse;
 import com.cholecystectomy.domain.dto.patient.PatientProfileDto;
+import com.cholecystectomy.domain.dto.poll.PatientPollDto;
 import com.cholecystectomy.domain.model.Doctor;
 import com.cholecystectomy.domain.model.Patient;
 import com.cholecystectomy.service.PatientService;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/patient")
@@ -45,6 +48,13 @@ public class PatientController {
     public ResponseEntity<PatientsResponse> getPatientsWithUnassignedDoctor() {
         List<Patient> patientsWithNoDoctor = patientService.getAllPatientsWithNoDoctor();
         return ResponseEntity.ok(new PatientsResponse(patientsWithNoDoctor));
+    }
+
+    @GetMapping("/{id}/polls")
+    public ResponseEntity<Map<String, List<PatientPollDto>>> getPatientPolls(@PathVariable Long id) {
+        Map<String, List<PatientPollDto>> response = new HashMap<>();
+        response.put("polls", patientService.getPatientPolls(id));
+        return ResponseEntity.ok(response);
     }
 
 }

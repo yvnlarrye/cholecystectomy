@@ -2,14 +2,17 @@ package com.cholecystectomy.domain.model.poll;
 
 import com.cholecystectomy.domain.model.Patient;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-//@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "polls")
+@Getter
 public class Poll {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,20 +26,4 @@ public class Poll {
     public Poll(Patient patient) {
         this.patient = patient;
     }
-
-    //    @OneToOne(mappedBy = "poll", cascade = CascadeType.ALL)
-//    private GeneralInformation generalInformation;
-//
-//    @OneToOne(mappedBy = "poll", cascade = CascadeType.ALL)
-//    private AnamnesisOfLife anamnesisOfLife;
-//
-//    @OneToOne(mappedBy = "poll", cascade = CascadeType.ALL)
-//    private Cholecystectomy cholecystectomy;
-//
-//    @OneToOne(mappedBy = "poll", cascade = CascadeType.ALL)
-//    private ClinicalPart clinicalPart;
-//
-//    @OneToOne(mappedBy = "poll", cascade = CascadeType.ALL)
-//    private LaboratoryInstrumentalResearchMethods laboratoryInstrumentalResearchMethods;
-
 }

@@ -3,11 +3,13 @@ package com.cholecystectomy.service;
 import com.cholecystectomy.domain.dto.poll.*;
 import com.cholecystectomy.domain.model.Patient;
 import com.cholecystectomy.domain.model.poll.*;
+import com.cholecystectomy.exceptions.ResourceNotFoundException;
 import com.cholecystectomy.repository.poll.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +21,6 @@ public class PollService {
     private final CholecystectomyRecordRepository cholecystectomyRecordRepository;
     private final ClinicalPartRecordRepository clinicalPartRecordRepository;
     private final LaboratoryInstrumentalResearchMethodsRecordRepository laboratoryInstrumentalResearchMethodsRecordRepository;
-
-    private final PatientService patientService;
 
     public Poll create(Poll poll) {
         return pollRepository.save(poll);
@@ -126,8 +126,7 @@ public class PollService {
         return laboratoryInstrumentalResearchMethodsRecordRepository.save(laboratoryInstrumentalResearchMethodsRecord);
     }
 
-    public Poll createFullPoll(CreatePollDto createPollDto) {
-        Patient patient = patientService.getPatientById(createPollDto.getPatientId());
+    public Poll createFullPoll(CreatePollDto createPollDto, Patient patient) {
         Poll poll = create(new Poll(patient));
 
         createGeneralInformation(createPollDto.getGeneralInformation(), poll);
@@ -138,4 +137,34 @@ public class PollService {
 
         return poll;
     }
+
+    public List<Poll> getAllPatientPolls(Long patientId) {
+        return pollRepository.findAllByPatientId(patientId)
+                .orElseThrow(() -> new ResourceNotFoundException("Опросы пользователя не найдены."));
+    }
+
+    public GeneralInformationRecord getGeneralInformationRecord(Long pollId) {
+        return generalInformationRecordRepository.findById(pollId)
+                .orElseThrow(() -> new ResourceNotFoundException("По указанному опросу не существует сохраненных"));
+    }
+
+    public AnamnesisOfLifeRecord getAnamnesisOfLifeRecord(Long pollId) {
+        return anamnesisOfLifeRecordRepository.findById(pollId)
+                .orElseThrow(() -> new ResourceNotFoundException("По указанному опросу не существует сохраненных"));
+    }
+
+    public CholecystectomyRecord getCholecystectomyRecord(Long pollId) {
+        return cholecystectomyRecordRepository.findById(pollId)
+                .orElseThrow(() -> new ResourceNotFoundException("По указанному опросу не существует сохраненных"));
+    }
+
+    public ClinicalPartRecord getClinicalPartRecord(Long pollId) {
+        return clinicalPartRecordRepository.findById(pollId)
+                .orElseThrow(() -> new ResourceNotFoundException("По указанному опросу не существует сохраненных"));
+    }
+    public LaboratoryInstrumentalResearchMethodsRecord getLaboratoryInstrumentalResearchMethodsRecord(Long pollId) {
+        return laboratoryInstrumentalResearchMethodsRecordRepository.findById(pollId)
+                .orElseThrow(() -> new ResourceNotFoundException("По указанному опросу не существует сохраненных"));
+    }
+
 }

@@ -1,21 +1,26 @@
 package com.cholecystectomy.domain.model.poll;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Table(name = "laboratory_instrumental_research_methods_records")
 public class LaboratoryInstrumentalResearchMethodsRecord {
 
     @Id
+    @JsonIgnore
     private Long id;
 
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
     @Setter
+    @JsonIgnore
     private Poll poll;
 
     private String chestXray;
