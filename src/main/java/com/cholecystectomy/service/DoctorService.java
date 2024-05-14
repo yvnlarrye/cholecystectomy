@@ -49,5 +49,4 @@ public class DoctorService {
         doctor.setSex(request.getSex());
         return create(doctor);
     }
-
 }

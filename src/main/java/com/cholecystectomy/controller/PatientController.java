@@ -9,10 +9,7 @@ import com.cholecystectomy.domain.model.Patient;
 import com.cholecystectomy.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +36,7 @@ public class PatientController {
                 .sex(patient.getSex().getName())
                 .email(patient.getEmail())
                 .name(patient.getName())
+                .isPollAvailable(patient.getIsPollAvailable())
                 .doctor(doctorInfoDto)
                 .build();
         return ResponseEntity.ok(patientProfileDto);
@@ -56,5 +54,4 @@ public class PatientController {
         response.put("polls", patientService.getPatientPolls(id));
         return ResponseEntity.ok(response);
     }
-
 }

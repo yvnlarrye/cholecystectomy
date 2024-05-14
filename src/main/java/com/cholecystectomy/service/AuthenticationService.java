@@ -35,6 +35,7 @@ public class AuthenticationService {
         patient.setEmail(request.getEmail());
         patient.setPassword(passwordEncoder.encode(request.getPassword()));
         patient.setSex(request.getSex());
+        patient.setIsPollAvailable(false);
 
         patientService.create(patient);
         var jwt = jwtService.generateToken(patient);

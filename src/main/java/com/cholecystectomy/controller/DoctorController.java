@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/doctor")
@@ -45,5 +48,20 @@ public class DoctorController {
         return ResponseEntity.ok(profile);
     }
 
+    @PutMapping("/allow-poll/{patientId}")
+    public ResponseEntity<Map<String, String>> allowPoll(@PathVariable Long patientId) {
+        patientService.allowPoll(patientId);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Доступ к прохождению опроса выдан");
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/prohibit-poll/{patientId}")
+    public ResponseEntity<Map<String, String>> prohibitPoll(@PathVariable Long patientId) {
+        patientService.prohibitPoll(patientId);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Доступ к прохождению опроса закрыт");
+        return ResponseEntity.ok(response);
+    }
 
 }

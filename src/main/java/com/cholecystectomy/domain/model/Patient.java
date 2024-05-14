@@ -29,6 +29,9 @@ public class Patient extends User {
     @OneToMany(mappedBy = "patient")
     private List<Poll> polls;
 
+    @Column
+    private Boolean isPollAvailable;
+
     public Patient() {
         super.setRole(Role.ROLE_PATIENT);
     }

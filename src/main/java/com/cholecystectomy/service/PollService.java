@@ -133,6 +133,7 @@ public class PollService {
     }
 
     public Poll createFullPoll(CreatePollDto createPollDto, Patient patient) {
+        patient.setIsPollAvailable(false);
         Poll poll = create(new Poll(patient));
 
         saveGeneralInformation(createPollDto.getGeneralInformation(), new GeneralInformationRecord(), poll);
@@ -215,5 +216,14 @@ public class PollService {
         ClinicalPartRecord clinicalPartRecord = getClinicalPartRecord(id);
         saveClinicalPart(updatedPoll.getClinicalPart(), clinicalPartRecord, poll);
         return poll;
+    }
+
+    public void deletePoll(Long id) {
+        generalInformationRecordRepository.deleteById(id);
+        clinicalPartRecordRepository.deleteById(id);
+        cholecystectomyRecordRepository.deleteById(id);
+        laboratoryInstrumentalResearchMethodsRecordRepository.deleteById(id);
+        anamnesisOfLifeRecordRepository.deleteById(id);
+        pollRepository.deleteById(id);
     }
 }

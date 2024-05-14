@@ -7,8 +7,12 @@ import com.cholecystectomy.domain.model.poll.Poll;
 import com.cholecystectomy.service.PatientService;
 import com.cholecystectomy.service.PollService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/poll")
@@ -19,9 +23,14 @@ public class PollController {
     private final PatientService patientService;
 
     @PostMapping
-    public ResponseEntity<Poll> createPoll(@RequestBody CreatePollDto createPollDto) {
+    public ResponseEntity<?> createPoll(@RequestBody CreatePollDto createPollDto) {
         Patient patient = patientService.getPatientById(createPollDto.getPatientId());
-        return ResponseEntity.ok(pollService.createFullPoll(createPollDto, patient));
+        if (patient.getIsPollAvailable()) {
+            return ResponseEntity.ok(pollService.createFullPoll(createPollDto, patient));
+        }
+        Map<String, String> response = new HashMap<>();
+        response.put("error", "Пациенту не назначен опрос");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
     @GetMapping("/{id}")
@@ -32,6 +41,14 @@ public class PollController {
     @PutMapping("/{id}")
     public ResponseEntity<Poll> updatePoll(@PathVariable Long id, @RequestBody CreatePollDto updatedPoll) {
         return ResponseEntity.ok(pollService.updatePoll(updatedPoll, id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> deletePoll(@PathVariable Long id) {
+        pollService.deletePoll(id);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Poll has been deleted successfully");
+        return ResponseEntity.ok(response);
     }
 
 }

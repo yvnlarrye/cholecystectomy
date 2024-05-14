@@ -79,4 +79,16 @@ public class PatientService {
         }
         return pollDtoList;
     }
+
+    public void allowPoll(Long patientId) {
+        Patient patient = getPatientById(patientId);
+        patient.setIsPollAvailable(true);
+        repository.save(patient);
+    }
+
+    public void prohibitPoll(Long patientId) {
+        Patient patient = getPatientById(patientId);
+        patient.setIsPollAvailable(false);
+        repository.save(patient);
+    }
 }

@@ -10,5 +10,6 @@ public class PatientProfileDto {
     private String name;
     private String email;
     private String sex;
+    private Boolean isPollAvailable;
     private PatientsDoctorInfoDto doctor;
 }
