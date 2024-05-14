@@ -6,8 +6,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class PatientPollDto {
+public class PollDto {
     private Long id;
+    private Long patientId;
     private String surname;
     private String firstName;
     private String fatherName;

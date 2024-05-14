@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -13,6 +14,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor
 @Table(name = "polls")
 @Getter
+@Setter
 public class Poll {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

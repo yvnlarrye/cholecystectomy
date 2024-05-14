@@ -9,7 +9,6 @@ import java.util.Date;
 @Entity
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Table(name = "general_information_records")
 public class GeneralInformationRecord {
@@ -37,4 +36,7 @@ public class GeneralInformationRecord {
     private Double bodyMassIndex;
     private Date deathDate;
 
+    public GeneralInformationRecord() {
+        createdAt = new Date();
+    }
 }

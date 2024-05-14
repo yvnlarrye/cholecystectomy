@@ -3,7 +3,7 @@ package com.cholecystectomy.controller;
 import com.cholecystectomy.domain.dto.doctor.PatientsDoctorInfoDto;
 import com.cholecystectomy.domain.dto.doctor.PatientsResponse;
 import com.cholecystectomy.domain.dto.patient.PatientProfileDto;
-import com.cholecystectomy.domain.dto.poll.PatientPollDto;
+import com.cholecystectomy.domain.dto.poll.PollDto;
 import com.cholecystectomy.domain.model.Doctor;
 import com.cholecystectomy.domain.model.Patient;
 import com.cholecystectomy.service.PatientService;
@@ -51,8 +51,8 @@ public class PatientController {
     }
 
     @GetMapping("/{id}/polls")
-    public ResponseEntity<Map<String, List<PatientPollDto>>> getPatientPolls(@PathVariable Long id) {
-        Map<String, List<PatientPollDto>> response = new HashMap<>();
+    public ResponseEntity<Map<String, List<PollDto>>> getPatientPolls(@PathVariable Long id) {
+        Map<String, List<PollDto>> response = new HashMap<>();
         response.put("polls", patientService.getPatientPolls(id));
         return ResponseEntity.ok(response);
     }

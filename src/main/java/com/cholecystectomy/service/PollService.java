@@ -8,7 +8,6 @@ import com.cholecystectomy.repository.poll.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -27,113 +26,120 @@ public class PollService {
     }
 
 
-    private GeneralInformationRecord createGeneralInformation(GeneralInformationDto generalInformationDto, Poll poll) {
-        GeneralInformationRecord generalInformationRecord = GeneralInformationRecord.builder()
-                .poll(poll)
-                .createdAt(new Date())
-                .birthDate(generalInformationDto.getBirthDate())
-                .age(generalInformationDto.getAge())
-                .numberOfPregnancies(generalInformationDto.getNumberOfPregnancies())
-                .numberOfChildbirths(generalInformationDto.getNumberOfChildbirths())
-                .address(generalInformationDto.getAddress())
-                .phoneNumber(generalInformationDto.getPhoneNumber())
-                .weight(generalInformationDto.getWeight())
-                .height(generalInformationDto.getHeight())
-                .bodyMassIndex(generalInformationDto.getBodyMassIndex())
-                .deathDate(generalInformationDto.getDeathDate())
-                .build();
-        return generalInformationRecordRepository.save(generalInformationRecord);
+    private GeneralInformationRecord saveGeneralInformation(
+            GeneralInformationDto generalInformationDto,
+            GeneralInformationRecord record,
+            Poll poll
+    ) {
+        record.setPoll(poll);
+        record.setBirthDate(generalInformationDto.getBirthDate());
+        record.setAge(generalInformationDto.getAge());
+        record.setNumberOfPregnancies(generalInformationDto.getNumberOfPregnancies());
+        record.setNumberOfChildbirths(generalInformationDto.getNumberOfChildbirths());
+        record.setAddress(generalInformationDto.getAddress());
+        record.setPhoneNumber(generalInformationDto.getPhoneNumber());
+        record.setWeight(generalInformationDto.getWeight());
+        record.setHeight(generalInformationDto.getHeight());
+        record.setBodyMassIndex(generalInformationDto.getBodyMassIndex());
+        record.setDeathDate(generalInformationDto.getDeathDate());
+
+        return generalInformationRecordRepository.save(record);
     }
 
-    private AnamnesisOfLifeRecord createAnamnesisOfLife(AnamnesisOfLifeDto anamnesisOfLifeDto, Poll poll) {
-        AnamnesisOfLifeRecord anamnesisOfLifeRecord = AnamnesisOfLifeRecord.builder()
-                .poll(poll)
-                .concomitantDiseases(anamnesisOfLifeDto.getConcomitantDiseases())
-                .smoking(anamnesisOfLifeDto.getSmoking())
-                .alcoholAbuse(anamnesisOfLifeDto.getAlcoholAbuse())
-                .allergy(anamnesisOfLifeDto.getAllergy())
-                .build();
-        return anamnesisOfLifeRecordRepository.save(anamnesisOfLifeRecord);
+    private AnamnesisOfLifeRecord saveAnamnesisOfLife(
+            AnamnesisOfLifeDto anamnesisOfLifeDto, AnamnesisOfLifeRecord record, Poll poll
+    ) {
+        record.setPoll(poll);
+        record.setConcomitantDiseases(anamnesisOfLifeDto.getConcomitantDiseases());
+        record.setSmoking(anamnesisOfLifeDto.getSmoking());
+        record.setAlcoholAbuse(anamnesisOfLifeDto.getAlcoholAbuse());
+        record.setAllergy(anamnesisOfLifeDto.getAllergy());
+        return anamnesisOfLifeRecordRepository.save(record);
     }
 
-    private CholecystectomyRecord createCholecystectomy(CholecystectomyDto cholecystectomyDto, Poll poll) {
-        CholecystectomyRecord cholecystectomyRecord = CholecystectomyRecord.builder()
-                .poll(poll)
-                .cholelithiasisDiagnosisDate(cholecystectomyDto.getCholelithiasisDiagnosisDate())
-                .diseaseCourse(cholecystectomyDto.getDiseaseCourse())
-                .surgeryType(cholecystectomyDto.getSurgeryType())
-                .cholelithiasisOrder(cholecystectomyDto.getCholelithiasisOrder())
-                .emergencyReason(cholecystectomyDto.getEmergencyReason())
-                .complicationsChronicEndometritis(cholecystectomyDto.getComplicationsChronicEndometritis())
-                .koykoDays(cholecystectomyDto.getKoykoDays())
-                .descriptionOfMacropreparation(cholecystectomyDto.getDescriptionOfMacropreparation())
-                .heredityIsBurdenedWithCholelithiasis(cholecystectomyDto.getHeredityIsBurdenedWithCholelithiasis())
-                .build();
-        return cholecystectomyRecordRepository.save(cholecystectomyRecord);
+    private CholecystectomyRecord saveCholecystectomy(
+            CholecystectomyDto cholecystectomyDto, CholecystectomyRecord record, Poll poll
+    ) {
+        record.setPoll(poll);
+        record.setCholelithiasisDiagnosisDate(cholecystectomyDto.getCholelithiasisDiagnosisDate());
+        record.setDiseaseCourse(cholecystectomyDto.getDiseaseCourse());
+        record.setSurgeryType(cholecystectomyDto.getSurgeryType());
+        record.setCholelithiasisOrder(cholecystectomyDto.getCholelithiasisOrder());
+        record.setEmergencyReason(cholecystectomyDto.getEmergencyReason());
+        record.setComplicationsChronicEndometritis(cholecystectomyDto.getComplicationsChronicEndometritis());
+        record.setKoykoDays(cholecystectomyDto.getKoykoDays());
+        record.setDescriptionOfMacropreparation(cholecystectomyDto.getDescriptionOfMacropreparation());
+        record.setHeredityIsBurdenedWithCholelithiasis(cholecystectomyDto.getHeredityIsBurdenedWithCholelithiasis());
+
+        return cholecystectomyRecordRepository.save(record);
     }
 
-    private ClinicalPartRecord createClinicalPart(ClinicalPartDto clinicalPartDto, Poll poll) {
-        ClinicalPartRecord clinicalPartRecord = ClinicalPartRecord.builder()
-                .poll(poll)
-                .pain(clinicalPartDto.getPain())
-                .localisation(clinicalPartDto.getLocalisation())
-                .irradiation(clinicalPartDto.getIrradiation())
-                .durance(clinicalPartDto.getDurance())
-                .attacksOfBiliaryColic(clinicalPartDto.getAttacksOfBiliaryColic())
-                .epigastricDiscomfort(clinicalPartDto.getEpigastricDiscomfort())
-                .impairedToleranceToFattyFoods(clinicalPartDto.getImpairedToleranceToFattyFoods())
-                .nausea(clinicalPartDto.getNausea())
-                .vomiting(clinicalPartDto.getVomiting())
-                .bitternessInTheMouth(clinicalPartDto.getBitternessInTheMouth())
-                .constipation(clinicalPartDto.getConstipation())
-                .diarrhea(clinicalPartDto.getDiarrhea())
-                .heartburn(clinicalPartDto.getHeartburn())
-                .sleepDisturbance(clinicalPartDto.getSleepDisturbance())
-                .fever(clinicalPartDto.getFever())
-                .build();
-        return clinicalPartRecordRepository.save(clinicalPartRecord);
+    private ClinicalPartRecord saveClinicalPart(
+            ClinicalPartDto clinicalPartDto, ClinicalPartRecord record, Poll poll
+    ) {
+        record.setPoll(poll);
+        record.setPain(clinicalPartDto.getPain());
+        record.setLocalisation(clinicalPartDto.getLocalisation());
+        record.setIrradiation(clinicalPartDto.getIrradiation());
+        record.setDurance(clinicalPartDto.getDurance());
+        record.setAttacksOfBiliaryColic(clinicalPartDto.getAttacksOfBiliaryColic());
+        record.setEpigastricDiscomfort(clinicalPartDto.getEpigastricDiscomfort());
+        record.setImpairedToleranceToFattyFoods(clinicalPartDto.getImpairedToleranceToFattyFoods());
+        record.setNausea(clinicalPartDto.getNausea());
+        record.setVomiting(clinicalPartDto.getVomiting());
+        record.setBitternessInTheMouth(clinicalPartDto.getBitternessInTheMouth());
+        record.setConstipation(clinicalPartDto.getConstipation());
+        record.setDiarrhea(clinicalPartDto.getDiarrhea());
+        record.setHeartburn(clinicalPartDto.getHeartburn());
+        record.setSleepDisturbance(clinicalPartDto.getSleepDisturbance());
+        record.setFever(clinicalPartDto.getFever());
+
+        return clinicalPartRecordRepository.save(record);
     }
 
-    private LaboratoryInstrumentalResearchMethodsRecord createLaboratoryInstrumentalResearchMethods(LaboratoryInstrumentalResearchMethodsDto laboratoryInstrumentalResearchMethodsDto, Poll poll) {
-        LaboratoryInstrumentalResearchMethodsRecord laboratoryInstrumentalResearchMethodsRecord = LaboratoryInstrumentalResearchMethodsRecord.builder()
-                .poll(poll)
-                .chestXray(laboratoryInstrumentalResearchMethodsDto.getChestXray())
-                .chestXrayDeviations(laboratoryInstrumentalResearchMethodsDto.getChestXrayDeviations())
-                .electrocardiography(laboratoryInstrumentalResearchMethodsDto.getElectrocardiography())
-                .electrocardiographyDeviations(laboratoryInstrumentalResearchMethodsDto.getElectrocardiographyDeviations())
-                .generalBloodAnalysis(laboratoryInstrumentalResearchMethodsDto.getGeneralBloodAnalysis())
-                .hemoglobin(laboratoryInstrumentalResearchMethodsDto.getHemoglobin())
-                .redBloodCells(laboratoryInstrumentalResearchMethodsDto.getRedBloodCells())
-                .leukocytes(laboratoryInstrumentalResearchMethodsDto.getLeukocytes())
-                .erythrocyteSedimentationRate(laboratoryInstrumentalResearchMethodsDto.getErythrocyteSedimentationRate())
-                .generalUrineAnalysis(laboratoryInstrumentalResearchMethodsDto.getGeneralUrineAnalysis())
-                .generalUrineAnalysisDeviations(laboratoryInstrumentalResearchMethodsDto.getGeneralUrineAnalysisDeviations())
-                .bloodType(laboratoryInstrumentalResearchMethodsDto.getBloodType())
-                .rhFactor(laboratoryInstrumentalResearchMethodsDto.getRhFactor())
-                .biochemicalStudies(laboratoryInstrumentalResearchMethodsDto.getBiochemicalStudies())
-                .cholesterol(laboratoryInstrumentalResearchMethodsDto.getCholesterol())
-                .totalBilirubin(laboratoryInstrumentalResearchMethodsDto.getTotalBilirubin())
-                .directBilirubin(laboratoryInstrumentalResearchMethodsDto.getDirectBilirubin())
-                .indirectBilirubin(laboratoryInstrumentalResearchMethodsDto.getIndirectBilirubin())
-                .alt(laboratoryInstrumentalResearchMethodsDto.getAlt())
-                .ast(laboratoryInstrumentalResearchMethodsDto.getAst())
-                .alkalinePhosphatase(laboratoryInstrumentalResearchMethodsDto.getAlkalinePhosphatase())
-                .gammaGlutamylTransferase(laboratoryInstrumentalResearchMethodsDto.getGammaGlutamylTransferase())
-                .serumGlucose(laboratoryInstrumentalResearchMethodsDto.getSerumGlucose())
-                .fibrogastroduodenoscopy(laboratoryInstrumentalResearchMethodsDto.getFibrogastroduodenoscopy())
-                .ultrasoundExaminationOfTheAbdominalOrgans(laboratoryInstrumentalResearchMethodsDto.getUltrasoundExaminationOfTheAbdominalOrgans())
-                .build();
-        return laboratoryInstrumentalResearchMethodsRecordRepository.save(laboratoryInstrumentalResearchMethodsRecord);
+    private LaboratoryInstrumentalResearchMethodsRecord saveLaboratoryInstrumentalResearchMethods(
+            LaboratoryInstrumentalResearchMethodsDto laboratoryInstrumentalResearchMethodsDto,
+            LaboratoryInstrumentalResearchMethodsRecord record,
+            Poll poll
+    ) {
+        record.setPoll(poll);
+        record.setChestXray(laboratoryInstrumentalResearchMethodsDto.getChestXray());
+        record.setChestXrayDeviations(laboratoryInstrumentalResearchMethodsDto.getChestXrayDeviations());
+        record.setElectrocardiography(laboratoryInstrumentalResearchMethodsDto.getElectrocardiography());
+        record.setElectrocardiographyDeviations(laboratoryInstrumentalResearchMethodsDto.getElectrocardiographyDeviations());
+        record.setGeneralBloodAnalysis(laboratoryInstrumentalResearchMethodsDto.getGeneralBloodAnalysis());
+        record.setHemoglobin(laboratoryInstrumentalResearchMethodsDto.getHemoglobin());
+        record.setRedBloodCells(laboratoryInstrumentalResearchMethodsDto.getRedBloodCells());
+        record.setLeukocytes(laboratoryInstrumentalResearchMethodsDto.getLeukocytes());
+        record.setErythrocyteSedimentationRate(laboratoryInstrumentalResearchMethodsDto.getErythrocyteSedimentationRate());
+        record.setGeneralUrineAnalysis(laboratoryInstrumentalResearchMethodsDto.getGeneralUrineAnalysis());
+        record.setGeneralUrineAnalysisDeviations(laboratoryInstrumentalResearchMethodsDto.getGeneralUrineAnalysisDeviations());
+        record.setBloodType(laboratoryInstrumentalResearchMethodsDto.getBloodType());
+        record.setRhFactor(laboratoryInstrumentalResearchMethodsDto.getRhFactor());
+        record.setBiochemicalStudies(laboratoryInstrumentalResearchMethodsDto.getBiochemicalStudies());
+        record.setCholesterol(laboratoryInstrumentalResearchMethodsDto.getCholesterol());
+        record.setTotalBilirubin(laboratoryInstrumentalResearchMethodsDto.getTotalBilirubin());
+        record.setDirectBilirubin(laboratoryInstrumentalResearchMethodsDto.getDirectBilirubin());
+        record.setIndirectBilirubin(laboratoryInstrumentalResearchMethodsDto.getIndirectBilirubin());
+        record.setAlt(laboratoryInstrumentalResearchMethodsDto.getAlt());
+        record.setAst(laboratoryInstrumentalResearchMethodsDto.getAst());
+        record.setAlkalinePhosphatase(laboratoryInstrumentalResearchMethodsDto.getAlkalinePhosphatase());
+        record.setGammaGlutamylTransferase(laboratoryInstrumentalResearchMethodsDto.getGammaGlutamylTransferase());
+        record.setSerumGlucose(laboratoryInstrumentalResearchMethodsDto.getSerumGlucose());
+        record.setFibrogastroduodenoscopy(laboratoryInstrumentalResearchMethodsDto.getFibrogastroduodenoscopy());
+        record.setUltrasoundExaminationOfTheAbdominalOrgans(laboratoryInstrumentalResearchMethodsDto.getUltrasoundExaminationOfTheAbdominalOrgans());
+
+        return laboratoryInstrumentalResearchMethodsRecordRepository.save(record);
     }
 
     public Poll createFullPoll(CreatePollDto createPollDto, Patient patient) {
         Poll poll = create(new Poll(patient));
 
-        createGeneralInformation(createPollDto.getGeneralInformation(), poll);
-        createAnamnesisOfLife(createPollDto.getAnamnesisOfLife(), poll);
-        createCholecystectomy(createPollDto.getCholecystectomy(), poll);
-        createClinicalPart(createPollDto.getClinicalPart(), poll);
-        createLaboratoryInstrumentalResearchMethods(createPollDto.getLaboratoryInstrumentalResearchMethods(), poll);
+        saveGeneralInformation(createPollDto.getGeneralInformation(), new GeneralInformationRecord(), poll);
+        saveAnamnesisOfLife(createPollDto.getAnamnesisOfLife(), new AnamnesisOfLifeRecord(), poll);
+        saveCholecystectomy(createPollDto.getCholecystectomy(), new CholecystectomyRecord(), poll);
+        saveClinicalPart(createPollDto.getClinicalPart(), new ClinicalPartRecord(), poll);
+        saveLaboratoryInstrumentalResearchMethods(createPollDto.getLaboratoryInstrumentalResearchMethods(), new LaboratoryInstrumentalResearchMethodsRecord(), poll);
 
         return poll;
     }
@@ -162,9 +168,52 @@ public class PollService {
         return clinicalPartRecordRepository.findById(pollId)
                 .orElseThrow(() -> new ResourceNotFoundException("По указанному опросу не существует сохраненных"));
     }
+
     public LaboratoryInstrumentalResearchMethodsRecord getLaboratoryInstrumentalResearchMethodsRecord(Long pollId) {
         return laboratoryInstrumentalResearchMethodsRecordRepository.findById(pollId)
                 .orElseThrow(() -> new ResourceNotFoundException("По указанному опросу не существует сохраненных"));
     }
 
+    public PollDto getPoll(Long pollId) {
+        Poll poll = pollRepository.findById(pollId)
+                .orElseThrow(() -> new ResourceNotFoundException("Не удалось найти опрос"));
+        String[] patientNameParts = poll.getPatient().getName().split(" ");
+        return PollDto.builder()
+                .id(pollId)
+                .patientId(poll.getPatient().getId())
+                .sex(poll.getPatient().getSex().getName())
+                .firstName(patientNameParts[1])
+                .surname(patientNameParts[0])
+                .fatherName(patientNameParts[2])
+                .generalInformation(getGeneralInformationRecord(pollId))
+                .anamnesisOfLife(getAnamnesisOfLifeRecord(pollId))
+                .laboratoryInstrumentalResearchMethods(getLaboratoryInstrumentalResearchMethodsRecord(pollId))
+                .clinicalPart(getClinicalPartRecord(pollId))
+                .cholecystectomy(getCholecystectomyRecord(pollId))
+                .build();
+    }
+
+    public Poll updatePoll(CreatePollDto updatedPoll, Long id) {
+        Poll poll = pollRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Не удалось найти опрос"));
+        GeneralInformationRecord generalInformationRecord = getGeneralInformationRecord(id);
+        saveGeneralInformation(updatedPoll.getGeneralInformation(), generalInformationRecord, poll);
+
+        AnamnesisOfLifeRecord anamnesisOfLifeRecord = getAnamnesisOfLifeRecord(id);
+        saveAnamnesisOfLife(updatedPoll.getAnamnesisOfLife(), anamnesisOfLifeRecord, poll);
+
+        CholecystectomyRecord cholecystectomyRecord = getCholecystectomyRecord(id);
+        saveCholecystectomy(updatedPoll.getCholecystectomy(), cholecystectomyRecord, poll);
+
+        LaboratoryInstrumentalResearchMethodsRecord laboratoryInstrumentalResearchMethodsRecord
+                = getLaboratoryInstrumentalResearchMethodsRecord(id);
+        saveLaboratoryInstrumentalResearchMethods(
+                updatedPoll.getLaboratoryInstrumentalResearchMethods(),
+                laboratoryInstrumentalResearchMethodsRecord,
+                poll);
+
+        ClinicalPartRecord clinicalPartRecord = getClinicalPartRecord(id);
+        saveClinicalPart(updatedPoll.getClinicalPart(), clinicalPartRecord, poll);
+        return poll;
+    }
 }

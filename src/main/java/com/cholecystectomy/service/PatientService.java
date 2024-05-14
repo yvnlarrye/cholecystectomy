@@ -1,6 +1,6 @@
 package com.cholecystectomy.service;
 
-import com.cholecystectomy.domain.dto.poll.PatientPollDto;
+import com.cholecystectomy.domain.dto.poll.PollDto;
 import com.cholecystectomy.domain.model.Doctor;
 import com.cholecystectomy.domain.model.Patient;
 import com.cholecystectomy.domain.model.poll.*;
@@ -45,13 +45,12 @@ public class PatientService {
         return repository.findAllByDoctorIsNull();
     }
 
-    public List<PatientPollDto> getPatientPolls(Long id) {
+    public List<PollDto> getPatientPolls(Long id) {
         List<Poll> polls = pollService.getAllPatientPolls(id);
-        List<PatientPollDto> patientPollDtoList = new ArrayList<>();
+        List<PollDto> pollDtoList = new ArrayList<>();
         for (Poll poll : polls) {
             GeneralInformationRecord generalInformationRecord =
                     pollService.getGeneralInformationRecord(poll.getId());
-            System.out.println(generalInformationRecord);
 
             CholecystectomyRecord cholecystectomyRecord =
                     pollService.getCholecystectomyRecord(poll.getId());
@@ -62,9 +61,10 @@ public class PatientService {
             LaboratoryInstrumentalResearchMethodsRecord laboratoryInstrumentalResearchMethodsRecord = pollService.getLaboratoryInstrumentalResearchMethodsRecord(poll.getId());
             String[] patientNameParts = poll.getPatient().getName().split(" ");
 
-            patientPollDtoList.add(PatientPollDto
+            pollDtoList.add(PollDto
                     .builder()
                     .id(poll.getId())
+                    .patientId(poll.getPatient().getId())
                     .surname(patientNameParts[0])
                     .firstName(patientNameParts[1])
                     .fatherName(patientNameParts[2])
@@ -77,6 +77,6 @@ public class PatientService {
                     .build()
             );
         }
-        return patientPollDtoList;
+        return pollDtoList;
     }
 }
