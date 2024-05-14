@@ -7,10 +7,17 @@ import com.cholecystectomy.domain.model.poll.Poll;
 import com.cholecystectomy.service.PatientService;
 import com.cholecystectomy.service.PollService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,4 +58,21 @@ public class PollController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/download/{id}")
+    public ResponseEntity<Resource> downloadPoll(@PathVariable Long id) throws FileNotFoundException {
+        String pollFileName = pollService.download(id);
+        Path filePath = Paths.get(pollFileName);
+        Resource fileResource = new FileSystemResource(filePath);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + filePath.getFileName().toString() + "\"");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(filePath.toFile().length())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(fileResource);
+    }
+
 }
+

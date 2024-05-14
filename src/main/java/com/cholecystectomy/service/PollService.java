@@ -5,9 +5,11 @@ import com.cholecystectomy.domain.model.Patient;
 import com.cholecystectomy.domain.model.poll.*;
 import com.cholecystectomy.exceptions.ResourceNotFoundException;
 import com.cholecystectomy.repository.poll.*;
+import com.cholecystectomy.service.poll.serializer.PollSerializerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 @Service
@@ -20,6 +22,7 @@ public class PollService {
     private final CholecystectomyRecordRepository cholecystectomyRecordRepository;
     private final ClinicalPartRecordRepository clinicalPartRecordRepository;
     private final LaboratoryInstrumentalResearchMethodsRecordRepository laboratoryInstrumentalResearchMethodsRecordRepository;
+    private final PollSerializerService pollSerializerService;
 
     public Poll create(Poll poll) {
         return pollRepository.save(poll);
@@ -225,5 +228,9 @@ public class PollService {
         laboratoryInstrumentalResearchMethodsRecordRepository.deleteById(id);
         anamnesisOfLifeRecordRepository.deleteById(id);
         pollRepository.deleteById(id);
+    }
+
+    public String download(Long id) throws FileNotFoundException {
+        return pollSerializerService.serializePoll(getPoll(id));
     }
 }
