@@ -48,10 +48,12 @@ public class PatientController {
         return ResponseEntity.ok(new PatientsResponse(patientsWithNoDoctor));
     }
 
+
     @GetMapping("/{id}/polls")
     public ResponseEntity<Map<String, List<PollDto>>> getPatientPolls(@PathVariable Long id) {
         Map<String, List<PollDto>> response = new HashMap<>();
         response.put("polls", patientService.getPatientPolls(id));
         return ResponseEntity.ok(response);
     }
+
 }

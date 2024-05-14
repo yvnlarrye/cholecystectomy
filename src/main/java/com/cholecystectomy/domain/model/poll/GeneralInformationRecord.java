@@ -3,6 +3,8 @@ package com.cholecystectomy.domain.model.poll;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 
@@ -22,6 +24,7 @@ public class GeneralInformationRecord {
     @JoinColumn(name = "id")
     @Setter
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Poll poll;
 
     private Date createdAt;

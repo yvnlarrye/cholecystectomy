@@ -2,7 +2,6 @@ package com.cholecystectomy.exceptions.handler;
 
 import com.cholecystectomy.exceptions.InvalidSignInDataException;
 import com.cholecystectomy.exceptions.ResourceNotFoundException;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
@@ -56,22 +55,4 @@ public class GlobalExceptionHandler {
                         constraintViolation.getMessage()).toList();
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
-
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<Map<String, String>> handleExpiredJwtException(
-            ExpiredJwtException e) {
-
-        Map<String, String> response = new HashMap<>();
-        response.put("errors", "Срок действия сессии истёк");
-        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.UNAUTHORIZED);
-    }
-
-//    @ExceptionHandler(DataIntegrityViolationException.class)
-//    public ResponseEntity<Map<String, String>> handlePostgreSQLConstraintException(
-//            DataIntegrityViolationException e) {
-//        Map<String, String> response = new HashMap<>();
-//        response.put("errors", List.of(e.getMessage()).toString());
-//        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.BAD_REQUEST);
-//    }
-
 }

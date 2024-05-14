@@ -91,4 +91,8 @@ public class PatientService {
         patient.setIsPollAvailable(false);
         repository.save(patient);
     }
+
+    public List<Patient> getAllPatients() {
+        return repository.findAll();
+    }
 }

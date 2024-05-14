@@ -63,5 +63,4 @@ public class DoctorController {
         response.put("message", "Доступ к прохождению опроса закрыт");
         return ResponseEntity.ok(response);
     }
-
 }

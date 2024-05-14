@@ -8,6 +8,8 @@ import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class JobService {
@@ -46,5 +48,9 @@ public class JobService {
             throw new ResourceNotFoundException("Должность не найдена");
         }
         repository.deleteById(id);
+    }
+
+    public List<Job> getAll() {
+        return repository.findAll();
     }
 }

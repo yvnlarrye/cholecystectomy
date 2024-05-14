@@ -49,4 +49,8 @@ public class DoctorService {
         doctor.setSex(request.getSex());
         return create(doctor);
     }
+
+    public List<Doctor> getAllDoctors() {
+        return repository.findAll();
+    }
 }

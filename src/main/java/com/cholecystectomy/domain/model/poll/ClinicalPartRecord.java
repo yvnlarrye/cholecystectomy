@@ -3,6 +3,8 @@ package com.cholecystectomy.domain.model.poll;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Builder
@@ -21,6 +23,7 @@ public class ClinicalPartRecord {
     @JoinColumn(name = "id")
     @Setter
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Poll poll;
 
     private String pain;
