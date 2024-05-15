@@ -3,6 +3,7 @@ package com.cholecystectomy.service;
 import com.cholecystectomy.domain.dto.poll.PollDto;
 import com.cholecystectomy.domain.model.Doctor;
 import com.cholecystectomy.domain.model.Patient;
+import com.cholecystectomy.domain.model.Sex;
 import com.cholecystectomy.domain.model.poll.*;
 import com.cholecystectomy.exceptions.ResourceNotFoundException;
 import com.cholecystectomy.repository.PatientRepository;
@@ -95,4 +96,13 @@ public class PatientService {
     public List<Patient> getAllPatients() {
         return repository.findAll();
     }
+
+    public Long getPatientsCountWithSex(Sex sex) {
+        return repository.countBySex(sex.name());
+    }
+
+    public Long getPatientsCount() {
+        return repository.count();
+    }
+
 }

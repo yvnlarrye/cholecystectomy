@@ -10,6 +10,16 @@ import java.util.List;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-//    @Query("SELECT p FROM Patient p WHERE p.doctor = null")
     List<Patient> findAllByDoctorIsNull();
+
+    @Query(
+            value = """
+                    SELECT COUNT(u.sex)
+                    FROM patients p
+                    JOIN users u ON p.id = u.id
+                    WHERE u.sex = :sex
+                    """,
+            nativeQuery = true
+    )
+    Long countBySex(String sex);
 }

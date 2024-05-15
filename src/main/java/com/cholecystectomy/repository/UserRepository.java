@@ -1,6 +1,7 @@
 package com.cholecystectomy.repository;
 
 import com.cholecystectomy.domain.model.Role;
+import com.cholecystectomy.domain.model.Sex;
 import com.cholecystectomy.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

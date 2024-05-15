@@ -2,6 +2,7 @@ package com.cholecystectomy.service;
 
 import com.cholecystectomy.domain.dto.poll.*;
 import com.cholecystectomy.domain.model.Patient;
+import com.cholecystectomy.domain.model.Sex;
 import com.cholecystectomy.domain.model.poll.*;
 import com.cholecystectomy.exceptions.ResourceNotFoundException;
 import com.cholecystectomy.repository.poll.*;
@@ -9,6 +10,7 @@ import com.cholecystectomy.service.poll.serializer.PollSerializerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.DataOutput;
 import java.io.FileNotFoundException;
 import java.util.List;
 
@@ -233,4 +235,45 @@ public class PollService {
     public String download(Long id) throws FileNotFoundException {
         return pollSerializerService.serializePoll(getPoll(id));
     }
+
+    public Double getAverageAgeWithSex(Sex sex) {
+       return generalInformationRecordRepository.getAverageAgeBySex(sex.name());
+    }
+
+    public Double getAverageWeightBySex(Sex sex) {
+        return generalInformationRecordRepository.getAverageWeightBySex(sex.name());
+    }
+
+    public Double getAverageHeightBySex(Sex sex) {
+        return generalInformationRecordRepository.getAverageHeightBySex(sex.name());
+    }
+
+    public Double getAverageBodyMaxIndexBySex(Sex sex) {
+        return generalInformationRecordRepository.getAverageBodyMaxIndexBySex(sex.name());
+    }
+
+    public Long getAlivePatientsCount(Sex sex) {
+        return generalInformationRecordRepository.getAlivePatientsCount(sex.name());
+    }
+
+    public Long getDeadPatientsCount(Sex sex) {
+        return generalInformationRecordRepository.getDeadPatientsCount(sex.name());
+    }
+
+    public Long getCholelithiasisOrderCount(Sex sex, String order) {
+        return cholecystectomyRecordRepository.getCholelithiasisOrderCount(sex.name(), order);
+    }
+
+    public Long getComplicationsChronicEndometritisCount(Sex sex) {
+        return cholecystectomyRecordRepository.getComplicationsChronicEndometritisCount(sex.name());
+    }
+
+    public Double getAverageKoykoDays(Sex sex) {
+        return cholecystectomyRecordRepository.getAverageKoykoDays(sex.name());
+    }
+
+    public Long getHeredityIsBurdenedWithCholelithiasisCount(Sex sex) {
+        return cholecystectomyRecordRepository.getHeredityIsBurdenedWithCholelithiasisCount(sex.name());
+    }
+
 }

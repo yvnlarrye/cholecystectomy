@@ -53,4 +53,8 @@ public class DoctorService {
     public List<Doctor> getAllDoctors() {
         return repository.findAll();
     }
+
+    public Long getDoctorsCount() {
+        return repository.count();
+    }
 }
