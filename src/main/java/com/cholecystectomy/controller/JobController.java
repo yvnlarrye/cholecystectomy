@@ -2,8 +2,11 @@ package com.cholecystectomy.controller;
 
 import com.cholecystectomy.domain.dto.job.CreateJobRequest;
 import com.cholecystectomy.domain.dto.job.UpdateJobRequest;
+import com.cholecystectomy.domain.model.Doctor;
 import com.cholecystectomy.domain.model.Job;
+import com.cholecystectomy.service.DoctorService;
 import com.cholecystectomy.service.JobService;
+import com.cholecystectomy.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,8 +22,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JobController {
     private final JobService jobService;
+    private final UserService userService;
+    private final DoctorService doctorService;
 
-    @PostMapping
+    @PostMapping("/job")
     public ResponseEntity<Job> createJob(@RequestBody CreateJobRequest request) {
         Job job = new Job(request.getName());
         return new ResponseEntity<>(jobService.create(job), new HttpHeaders(), HttpStatus.CREATED);
@@ -45,7 +50,11 @@ public class JobController {
 
     @DeleteMapping("/job/{id}")
     public ResponseEntity<?> deleteJob(@PathVariable Long id) {
+        doctorService.getDoctorsWithJob(id)
+                        .forEach((doctor -> userService.deleteUser(doctor.getId())));
         jobService.delete(id);
-        return ResponseEntity.ok().build();
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Должность удалена");
+        return ResponseEntity.ok(response);
     }
 }

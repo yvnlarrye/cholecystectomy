@@ -24,7 +24,7 @@ public class Job {
     @NotBlank
     private String name;
 
-    @OneToMany(mappedBy = "job")
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
     @JsonIgnore
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Doctor> doctors;

@@ -13,6 +13,10 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository repository;
 
+    public Boolean isUserExists(String email) {
+        return repository.existsByEmail(email);
+    }
+
     /**
      * Получение пользователя по имени пользователя
      *

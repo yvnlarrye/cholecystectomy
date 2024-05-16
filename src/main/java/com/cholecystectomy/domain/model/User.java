@@ -13,8 +13,8 @@ import java.util.List;
 
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

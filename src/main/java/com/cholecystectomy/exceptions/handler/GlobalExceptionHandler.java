@@ -4,6 +4,8 @@ import com.cholecystectomy.exceptions.InvalidSignInDataException;
 import com.cholecystectomy.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +21,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler {
 
     private Map<String, List<String>> getErrorsMap(List<String> errors) {
         Map<String, List<String>> errorResponse = new HashMap<>();
         errorResponse.put("errors", errors);
         return errorResponse;
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<Map<String, List<String>>> handleUsernameNotFoundError(UsernameNotFoundException ex) {
+        return new ResponseEntity<>(getErrorsMap(List.of(ex.getMessage())), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -34,7 +42,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({EntityExistsException.class, UsernameNotFoundException.class, InvalidSignInDataException.class})
+    @ExceptionHandler({
+            EntityExistsException.class,
+            InvalidSignInDataException.class
+    })
     public ResponseEntity<Map<String, List<String>>> handleUserAlreadyExistsError(Exception ex) {
         return new ResponseEntity<>(getErrorsMap(List.of(ex.getMessage())), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }

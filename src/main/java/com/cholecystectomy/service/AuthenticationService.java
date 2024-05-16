@@ -5,6 +5,7 @@ import com.cholecystectomy.domain.dto.auth.SignInRequest;
 import com.cholecystectomy.domain.dto.auth.SignUpRequest;
 import com.cholecystectomy.domain.model.Patient;
 import com.cholecystectomy.exceptions.InvalidSignInDataException;
+import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,9 +28,12 @@ public class AuthenticationService {
      * @param request данные пользователя
      * @return токен
      */
-
-
     public JwtAuthenticationResponse signUp(SignUpRequest request) {
+
+        if (userService.isUserExists(request.getEmail())) {
+            throw new EntityExistsException("Пользователь с таким email уже существует");
+        }
+
         Patient patient = new Patient();
         patient.setName(request.getName());
         patient.setEmail(request.getEmail());

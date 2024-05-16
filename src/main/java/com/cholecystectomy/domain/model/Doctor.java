@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -27,6 +28,7 @@ public class Doctor extends User {
     @ManyToOne
     @JoinColumn(name = "job_id", nullable = false)
     @NotNull
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Job job;
 
     public Doctor() {

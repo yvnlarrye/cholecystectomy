@@ -6,6 +6,7 @@ import com.cholecystectomy.domain.model.Patient;
 import com.cholecystectomy.domain.model.Role;
 import com.cholecystectomy.exceptions.ResourceNotFoundException;
 import com.cholecystectomy.repository.DoctorRepository;
+import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class DoctorService {
     private final DoctorRepository repository;
     private final JobService jobService;
     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     public Doctor create(Doctor doctor) {
         return repository.save(doctor);
@@ -40,6 +42,10 @@ public class DoctorService {
     }
 
     public Doctor createDoctor(CreateDoctorRequest request) {
+        if (userService.isUserExists(request.getEmail())) {
+            throw new EntityExistsException("Пользователь с таким email уже существует");
+        }
+
         Doctor doctor = new Doctor();
         doctor.setEmail(request.getEmail());
         doctor.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -57,4 +63,9 @@ public class DoctorService {
     public Long getDoctorsCount() {
         return repository.count();
     }
+
+    public List<Doctor> getDoctorsWithJob(Long jobId) {
+        return repository.findByJobId(jobId);
+    }
+
 }

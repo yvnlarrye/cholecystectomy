@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
-    boolean existsByEmail(String email);
+    Boolean existsByEmail(String email);
 
     @Query("SELECT COUNT(u) FROM User u WHERE u.role = :role")
     Long countByRole(Role role);

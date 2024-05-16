@@ -1,10 +1,12 @@
 package com.cholecystectomy.config;
 
 
+import static com.cholecystectomy.domain.model.Role.*;
 import com.cholecystectomy.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import static org.springframework.http.HttpMethod.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -47,10 +49,19 @@ public class SecurityConfiguration {
                 // Настройка доступа к конечным точкам
                 .authorizeHttpRequests(request -> request
                         // Можно указать конкретный путь, * - 1 уровень вложенности, ** - любое количество уровней вложенности
-                        .requestMatchers("/api/v1/auth/logout").fullyAuthenticated()
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").anonymous()
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/v1/test/**").fullyAuthenticated()
+                        .requestMatchers("/api/v1/admin/**").hasAuthority(ROLE_ADMIN.name())
+                        .requestMatchers("/api/v1/job/**").hasAuthority(ROLE_ADMIN.name())
+                        .requestMatchers(GET, "/api/v1/doctor/{doctorId}/patients").hasAnyAuthority(ROLE_DOCTOR.name(), ROLE_ADMIN.name())
+                        .requestMatchers(GET, "/api/v1/doctor/{id}").authenticated()
+                        .requestMatchers("/api/v1/doctor/**").hasAnyAuthority(ROLE_DOCTOR.name(), ROLE_ADMIN.name())
+                        .requestMatchers(GET, "/api/v1/poll/**").authenticated()
+                        .requestMatchers(PUT, "/api/v1/poll/**").hasAnyAuthority(ROLE_ADMIN.name(), ROLE_DOCTOR.name())
+                        .requestMatchers(PUT, "/api/v1/poll/**").hasAnyAuthority(ROLE_ADMIN.name(), ROLE_DOCTOR.name())
+                        .requestMatchers(POST, "/api/v1/poll/**").hasAuthority(ROLE_PATIENT.name())
+
+
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
