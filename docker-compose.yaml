@@ -1,0 +1,42 @@
+version: '3.5'
+
+services:
+  cholecystectomy_db:
+
+    image: postgres:14-alpine
+    restart: unless-stopped
+
+    container_name: cholecystectomy_db
+    ports:
+      - 5432:5432
+
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: cholecystectomy
+
+  app:
+    image: yvnlarrye/cholecystectomy-app:1.0.0
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - cholecystectomy_db
+    environment:
+      - SERVER_PORT= 8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://cholecystectomy_db/cholecystectomy
+      - SERIALIZER_EXCEL_TEMPLATE_FILENAME=templates/poll-template.xlsx
+      - SERIALIZER_EXCEL_OUTPUT_FILENAME=temp/poll-result.xlsx
+
+  app-ui:
+    image: yvnlarrye/cholecystectomy-ui:1.0.0
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      - app
+    environment:
+      - SERVER_PORT= 8081
+
+
+
